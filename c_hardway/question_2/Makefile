@@ -1,4 +1,4 @@
-CFLAGS = "-Wall"
+CFLAGS=-Wall -g
 
 clean:
-  rm -f test
+	rm -f test
