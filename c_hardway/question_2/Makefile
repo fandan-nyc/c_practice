@@ -1,4 +1,3 @@
-CFLAGS=-Wall -g
-
+CFLAGS=-Wall
 clean:
 	rm -f test
