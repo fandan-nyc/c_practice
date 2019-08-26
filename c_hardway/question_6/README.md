@@ -27,3 +27,11 @@
    Without volatile, the compiler will optimized out the while loop which does nothing. it may or may change the order that the data/command is initialized. The compiler will try to be smart, read the hardare->busy once and fill into infinite loop. In this case, if you have Hardware to be defined as volatile.
    
    Volatile forces the compiler to do whatever you write. It cannot remove the memory assignments, it cannot cache variables in regsiter and it cannot change the order of assignments either. 
+
+* static: check the static.c example.
+  - The static variable will not go beyond its own scope. It will only remain in memory while the program is running. A normal or auto var is destroyed when the func is over.
+  - static variables are allocated memory in data segment, not in stack segment. (check memory_layout_of_c.md)
+  - static variables are initialized as 0, if not initialized explicitly.
+  - static variables can only be initialized using const literals. Having `static int i = init();` will not work.
+  - you can also have static global var and func. see static_func.c as example
+  - the static var cannot be declared inside struct. The reason is that, the struct members need to reside in the same memory segment because the value for the struct ele is fetched by counting the offset of the element from the begining address of the structure. In other words, the c compiler requires the entire struct elements to have continuous mem allocation. 
