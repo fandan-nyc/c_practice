@@ -38,6 +38,83 @@ the pic shows how that works.
 
   the stack contains the program stack, a LIFO strcut, typically located in the higher parts of mem. on PC X86, it grows to address zero. 
 
-  A stack pointer tracks the top of the stack, it is adjusted each time a value is pushed onto the stack.
+  A stack pointer tracks the top of the stack, it is adjusted each time a value is pushed onto the stack. This is how recursive func in C can work. Each time a recursive func calls itself, a new stack frame is used, so one set of variables does not interfere with the variables from another instance of the func.
 
+* Heap
+  Heap is the segment where dynamic memory allocation usually takes place. The head areas begins at the end of the BSS segment and grows to larger address from there. The heap area is managed by malloc, realloc, and free, which may use the brk and sbrk system calls to adjust the size.
   
+
+For example
+test_1 has no global var and static var. so there is on Text section
+```
+dfan-mbp143:mem_model dfan$ size -m test_1
+Segment __PAGEZERO: 4294967296
+Segment __TEXT: 4096
+	Section __text: 15
+	Section __unwind_info: 72
+	total 87
+Segment __LINKEDIT: 4096
+```
+
+test_2 has only global var and not initialized.
+```
+total 4294975488
+dfan-mbp143:mem_model dfan$ size -m test_2
+Segment __PAGEZERO: 4294967296
+Segment __TEXT: 4096
+	Section __text: 15
+	Section __unwind_info: 72
+	total 87
+Segment __DATA: 4096
+	Section __common: 4
+	total 4
+Segment __LINKEDIT: 4096
+total 4294979584
+```
+
+test 3 has global var and static var, but neither is initialized
+```
+dfan-mbp143:mem_model dfan$ size -m test_3
+Segment __PAGEZERO: 4294967296
+Segment __TEXT: 4096
+	Section __text: 15
+	Section __unwind_info: 72
+	total 87
+Segment __DATA: 4096
+	Section __bss: 4
+	Section __common: 4
+	total 8
+Segment __LINKEDIT: 4096
+total 4294979584
+```
+
+test4 has global and static initialized
+```
+dfan-mbp143:mem_model dfan$ size -m test_4
+Segment __PAGEZERO: 4294967296
+Segment __TEXT: 4096
+	Section __text: 15
+	Section __unwind_info: 72
+	total 87
+Segment __DATA: 4096
+	Section __data: 8
+	total 8
+Segment __LINKEDIT: 4096
+total 4294979584
+```
+
+test 5 is more comlicated text struct
+```dfan-mbp143:mem_model dfan$ size -m test_5
+Segment __PAGEZERO: 4294967296
+Segment __TEXT: 4096
+	Section __text: 74
+	Section __stubs: 6
+	Section __stub_helper: 26
+	Section __cstring: 3
+	Section __unwind_info: 72
+	total 181
+Segment __DATA: 4096
+	Section __nl_symbol_ptr: 16
+	Section __la_symbol_ptr: 8
+	total 24
+Segment __LINKEDIT: 4096```
