@@ -1,3 +1,7 @@
+if [ -z $1 ];
+then echo "question number not set";
+exit
+fi
 mkdir question_$1
 
 cp dbg.h question_$1
